@@ -1,0 +1,21 @@
+# weather_notifier.py
+
+import requests
+from plyer import notification
+
+def get_weather(city):
+    api_key = "your_api_key"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    response = requests.get(url).json()
+    return response["weather"][0]["description"], response["main"]["temp"]
+
+def send_notification(city):
+    weather, temp = get_weather(city)
+    notification.notify(
+        title=f"Weather Update: {city}",
+        message=f"{weather.capitalize()}, {temp}°C",
+        timeout=10
+    )
+
+# Sample usage
+send_notification("New York")
